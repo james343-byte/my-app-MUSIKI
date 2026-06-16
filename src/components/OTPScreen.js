@@ -8,7 +8,6 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
-import { verifyOTP } from '../services/authService';
 
 const OTPScreen = ({ navigation, route }) => {
   const [otp, setOtp] = useState('');
@@ -23,12 +22,13 @@ const OTPScreen = ({ navigation, route }) => {
 
     setLoading(true);
     try {
-      const user = await verifyOTP(otp);
-      // Navigate to profile setup or home
-      navigation.navigate('ProfileSetup', { userId: user.uid });
+      // Mock verification - simulating API call
+      setTimeout(() => {
+        navigation.replace('Home');
+        setLoading(false);
+      }, 1500);
     } catch (error) {
       Alert.alert('Error', error.message);
-    } finally {
       setLoading(false);
     }
   };
@@ -52,6 +52,8 @@ const OTPScreen = ({ navigation, route }) => {
         />
       </View>
 
+      <Text style={styles.mockText}>💡 Mock Mode: Enter any 6 digits</Text>
+
       <TouchableOpacity
         style={[styles.button, loading && styles.buttonDisabled]}
         onPress={handleVerifyOTP}
@@ -65,7 +67,7 @@ const OTPScreen = ({ navigation, route }) => {
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => navigation.goBack()}>
-        <Text style={styles.resendText}>Didn't receive OTP? Resend</Text>
+        <Text style={styles.resendText}>← Back</Text>
       </TouchableOpacity>
     </View>
   );
@@ -102,6 +104,13 @@ const styles = StyleSheet.create({
     fontSize: 24,
     textAlign: 'center',
     letterSpacing: 10,
+  },
+  mockText: {
+    textAlign: 'center',
+    color: '#FF6B6B',
+    fontSize: 12,
+    marginBottom: 15,
+    fontWeight: '600',
   },
   button: {
     backgroundColor: '#1DB954',

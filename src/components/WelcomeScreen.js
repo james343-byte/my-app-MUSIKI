@@ -8,7 +8,6 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
-import { sendOTP } from '../services/authService';
 
 const WelcomeScreen = ({ navigation }) => {
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -22,22 +21,20 @@ const WelcomeScreen = ({ navigation }) => {
 
     setLoading(true);
     try {
-      const formattedPhone = phoneNumber.startsWith('+')
-        ? phoneNumber
-        : `+${phoneNumber}`;
-      
-      await sendOTP(formattedPhone);
-      navigation.navigate('OTPScreen', { phoneNumber: formattedPhone });
+      // Mock OTP sending
+      setTimeout(() => {
+        navigation.navigate('OTPScreen', { phoneNumber });
+        setLoading(false);
+      }, 1000);
     } catch (error) {
       Alert.alert('Error', error.message);
-    } finally {
       setLoading(false);
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome to MUSIKI</Text>
+      <Text style={styles.title}>🎵 MUSIKI</Text>
       <Text style={styles.subtitle}>
         Your weather-aware music companion
       </Text>
@@ -54,6 +51,8 @@ const WelcomeScreen = ({ navigation }) => {
         />
       </View>
 
+      <Text style={styles.mockText}>💡 Mock Mode: Try +91 9876543210</Text>
+
       <TouchableOpacity
         style={[styles.button, loading && styles.buttonDisabled]}
         onPress={handleSendOTP}
@@ -65,6 +64,10 @@ const WelcomeScreen = ({ navigation }) => {
           <Text style={styles.buttonText}>Send OTP</Text>
         )}
       </TouchableOpacity>
+
+      <Text style={styles.infoText}>
+        ✅ No API key needed - Works offline in test mode!
+      </Text>
     </View>
   );
 };
@@ -77,16 +80,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   title: {
-    fontSize: 28,
+    fontSize: 48,
     fontWeight: 'bold',
     color: '#1DB954',
-    marginBottom: 10,
+    marginBottom: 5,
     textAlign: 'center',
   },
   subtitle: {
     fontSize: 16,
     color: '#666',
-    marginBottom: 30,
+    marginBottom: 40,
     textAlign: 'center',
   },
   inputContainer: {
@@ -105,11 +108,19 @@ const styles = StyleSheet.create({
     padding: 12,
     fontSize: 16,
   },
+  mockText: {
+    textAlign: 'center',
+    color: '#FF6B6B',
+    fontSize: 12,
+    marginBottom: 15,
+    fontWeight: '600',
+  },
   button: {
     backgroundColor: '#1DB954',
     padding: 15,
     borderRadius: 8,
     alignItems: 'center',
+    marginBottom: 20,
   },
   buttonDisabled: {
     opacity: 0.6,
@@ -118,6 +129,12 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
+  },
+  infoText: {
+    textAlign: 'center',
+    color: '#1DB954',
+    fontSize: 13,
+    fontWeight: '500',
   },
 });
 

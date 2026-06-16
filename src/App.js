@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { auth } from './config/firebase';
+import { Text } from 'react-native';
 
 import WelcomeScreen from './components/WelcomeScreen';
 import OTPScreen from './components/OTPScreen';
@@ -82,16 +82,14 @@ const AppStack = () => {
 };
 
 const App = () => {
-  const [user, setUser] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setUser(user);
+    // Simulate checking auth state
+    setTimeout(() => {
       setLoading(false);
-    });
-
-    return unsubscribe;
+    }, 500);
   }, []);
 
   if (loading) {
@@ -100,11 +98,9 @@ const App = () => {
 
   return (
     <NavigationContainer>
-      {user ? <AppStack /> : <AuthStack />}
+      {isLoggedIn ? <AppStack /> : <AuthStack />}
     </NavigationContainer>
   );
 };
 
 export default App;
-
-const { Text } = require('react-native');
